@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ИШАК.NET — официальный портал ишаков</title>
+<style>
+:root{--ink:#28251f;--cream:#f5f0e5;--orange:#e97842;--green:#667b54;--card:#fffdf7}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{padding:22px max(6vw,22px);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d9d0bd}
+.logo{font-weight:1000;letter-spacing:-1.5px;font-size:1.35rem}.logo span{color:var(--orange)}
+nav{display:flex;gap:20px;font-size:.9rem}nav a{color:inherit;text-decoration:none}
+.hero{padding:70px 6vw 54px;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;background:#e9e1d0}
+.eyebrow{text-transform:uppercase;letter-spacing:2px;color:var(--green);font-size:.75rem;font-weight:800}
+h1{font-size:clamp(3rem,8vw,6.8rem);line-height:.88;letter-spacing:-.075em;margin:18px 0}
+h1 em{font-style:normal;color:var(--orange)}.hero p{font-size:1.1rem;max-width:490px;line-height:1.6;color:#5e584e}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+button{border:0;border-radius:999px;padding:13px 19px;font-weight:800;font-size:.95rem;cursor:pointer;background:var(--ink);color:white;transition:.2s}
+button:hover{transform:translateY(-2px);filter:brightness(1.15)}button.secondary{background:transparent;color:var(--ink);border:1px solid #aaa08e}
+.hero-art{background:#d5c8ad;border-radius:30px;min-height:300px;display:grid;place-items:center;overflow:hidden}
+.hero-art svg{width:min(100%,480px);height:auto}
+main{padding:55px 6vw 80px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}
+h2{font-size:clamp(2rem,4vw,3rem);letter-spacing:-.05em;margin:0}.muted{color:#777064}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border:1px solid #e4dccd;border-radius:22px;overflow:hidden}
+.art{height:220px;background:#e7dfd0;display:grid;place-items:center}.art svg{height:95%;width:95%}
+.card-body{padding:18px}.card h3{margin:0 0 7px;font-size:1.15rem}.card p{margin:0;color:#716b60;line-height:1.5;font-size:.92rem}
+.tag{display:inline-block;margin-top:13px;padding:6px 10px;border-radius:30px;background:#edf0e6;color:#526447;font-size:.75rem;font-weight:800}
+.random{margin-top:46px;padding:28px;border-radius:24px;background:var(--green);color:white;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.random h2{font-size:2rem}.random p{margin:7px 0 0;color:#e1e7d9}.random button{background:#fff;color:#293321;white-space:nowrap}
+footer{padding:25px 6vw;background:#28251f;color:#cfc8bb;font-size:.85rem;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+#toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;background:#28251f;color:white;padding:12px 18px;border-radius:30px;transition:.25s;pointer-events:none}#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){nav{display:none}.hero{grid-template-columns:1fr;padding-top:48px}.hero-art{min-height:230px}.grid{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}.random{align-items:flex-start;flex-direction:column}.art{height:240px}}
+</style>
+</head>
+<body>
+<header><div class="logo">ИШАК<span>.NET</span> 🫏</div><nav><a href="#gallery">Галерея</a><a href="#facts">Факты</a><a href="#random">Случайный ишак</a></nav></header>
+<section class="hero">
+ <div><div class="eyebrow">Независимый портал ослиного величия</div><h1>СМОТРИ.<br><em>ЭТО ИШАК.</em></h1><p>Никакой суеты. Никаких дедлайнов. Только благородные уши, выразительная морда и абсолютная уверенность в себе.</p><div class="actions"><button onclick="document.querySelector('#gallery').scrollIntoView({behavior:'smooth'})">Открыть галерею ↓</button><button class="secondary" onclick="randomDonkey()">Удиви меня</button></div></div>
+ <div class="hero-art" id="heroArt"></div>
+</section>
+<main>
+ <section id="gallery"><div class="section-head"><div><div class="eyebrow">Коллекция</div><h2>Зал славы ишаков</h2></div><div class="muted">Три выдающихся представителя</div></div><div class="grid" id="cards"></div></section>
+ <section id="facts" class="random"><div><div class="eyebrow" style="color:#e7eddb">Мудрость дня</div><h2>Ишак не опаздывает.</h2><p>Он просто прибывает в собственном темпе.</p></div><button onclick="fact()">Ещё один факт</button></section>
+ <section id="random" style="padding-top:55px"><div class="section-head"><div><div class="eyebrow">Рандомайзер</div><h2>Какой ишак сегодня?</h2></div></div><div class="card" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center" id="randomCard"><div class="art" id="randomArt"></div><div class="card-body"><h3 id="randomName">Ишак дня</h3><p id="randomDesc">Нажми кнопку — и судьба покажет тебе нового осла.</p><button style="margin-top:18px" onclick="randomDonkey()">Вызвать ишака</button></div></div></section>
+</main>
+<footer><span>© 2026 ИШАК.NET — сделано с уважением к ушастым.</span><span>Сайт не несёт ответственности за внезапную ослофилию.</span></footer>
+<div id="toast">ИШАК ОБНАРУЖЕН 🫏</div>
+<script>
+const donkeys=[
+ {name:"Граф Ушастый",desc:"Аристократ полей. Смотрит так, будто ты задолжал ему сено.",tag:"Аристократ",coat:"#8d8170"},
+ {name:"Сэр Хрум",desc:"Специалист по траве, листьям и стратегическому отдыху.",tag:"Гурман",coat:"#b7a28b"},
+ {name:"Повелитель холмов",desc:"Не ищет приключений. Приключения сами уступают ему дорогу.",tag:"Легенда",coat:"#77736d"},
+ {name:"Философ",desc:"Знает ответы на все вопросы. Просто не считает нужным их сообщать.",tag:"Мыслитель",coat:"#a18b77"},
+ {name:"Боевой осёл",desc:"Выглядит мирно. Но у него есть план. И он связан с морковью.",tag:"Тактик",coat:"#82776c"},
+ {name:"Малыш Пончик",desc:"Маленький, пушистый и уже устал от ваших вопросов.",tag:"Милаха",coat:"#c2aa91"}
+];
+function donkeySVG(coat="#9b8b78",variant=0){return `<svg viewBox="0 0 420 280" role="img" aria-label="Иллюстрация осла"><ellipse cx="215" cy="244" rx="125" ry="14" fill="#b9ad98" opacity=".5"/><path d="M126 184 Q112 130 160 103 Q205 76 270 105 Q316 126 306 198 L290 233 L140 233Z" fill="${coat}"/><path d="M151 112 Q125 51 142 17 Q172 43 180 105Z" fill="${coat}" stroke="#6d6258" stroke-width="4"/><path d="M222 105 Q227 42 257 15 Q270 62 251 119Z" fill="${coat}" stroke="#6d6258" stroke-width="4"/><path d="M148 35 Q157 63 165 88" stroke="#d9b4a5" stroke-width="10" fill="none"/><path d="M253 34 Q247 66 244 91" stroke="#d9b4a5" stroke-width="10" fill="none"/><ellipse cx="214" cy="155" rx="86" ry="82" fill="${coat}"/><ellipse cx="215" cy="188" rx="57" ry="43" fill="#d4c5b2"/><ellipse cx="185" cy="146" rx="7" ry="9" fill="#211f1c"/><ellipse cx="244" cy="146" rx="7" ry="9" fill="#211f1c"/><ellipse cx="215" cy="181" rx="8" ry="6" fill="#4a3931"/><path d="M201 203 Q215 214 229 203" stroke="#70594b" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M151 220 L147 260 L170 260 L176 225 M267 222 L271 260 L294 260 L289 218" fill="${coat}" stroke="#6d6258" stroke-width="3"/><path d="M295 165 Q340 166 342 206" stroke="${coat}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M338 204 l13 8 -15 4" fill="#51463d"/></svg>`}
+document.getElementById("heroArt").innerHTML=donkeySVG("#8c7c6c",0);
+document.getElementById("cards").innerHTML=donkeys.slice(0,3).map((d,i)=>`<article class="card"><div class="art">${donkeySVG(d.coat,i)}</div><div class="card-body"><h3>${d.name}</h3><p>${d.desc}</p><span class="tag">${d.tag}</span></div></article>`).join("");
+let idx=0;function randomDonkey(){idx=Math.floor(Math.random()*donkeys.length);const d=donkeys[idx];document.getElementById("randomArt").innerHTML=donkeySVG(d.coat,idx);document.getElementById("randomName").textContent=d.name;document.getElementById("randomDesc").textContent=d.desc;const t=document.getElementById("toast");t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)}
+const facts=["У ослов отличная память: они могут узнавать места и других ослов спустя годы.","Длинные уши помогают ослам эффективнее отдавать тепло.","Ослы — социальные животные и часто привязываются к знакомым компаньонам.","Ишаки умеют издавать очень узнаваемый громкий рев."];
+function fact(){document.querySelector("#facts p").textContent=facts[Math.floor(Math.random()*facts.length)]}
+randomDonkey();
+</script>
+</body></html>
